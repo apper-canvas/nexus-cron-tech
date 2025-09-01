@@ -13,7 +13,7 @@ import Loading from "@/components/ui/Loading";
 const ContactsPage = () => {
   const { toggleSidebar } = useOutletContext();
   
-  const [contacts, setContacts] = useState([]);
+const [contacts, setContacts] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -21,7 +21,16 @@ const ContactsPage = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [sortConfig, setSortConfig] = useState({ field: "name", direction: "asc" });
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
 
+  // Calculate pagination values
+  const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPageContacts = filteredContacts.slice(startIndex, endIndex);
   const loadContacts = useCallback(async () => {
     try {
       setLoading(true);
@@ -42,9 +51,10 @@ const ContactsPage = () => {
   }, [loadContacts]);
 
   // Search functionality
-  useEffect(() => {
+useEffect(() => {
     if (!searchTerm) {
       setFilteredContacts(contacts);
+      setCurrentPage(1); // Reset to first page when clearing search
       return;
     }
 
@@ -56,10 +66,11 @@ const ContactsPage = () => {
     );
 
     setFilteredContacts(filtered);
+    setCurrentPage(1); // Reset to first page when search results change
   }, [searchTerm, contacts]);
 
   // Sorting functionality
-  const handleSort = (field) => {
+const handleSort = (field) => {
     const direction = sortConfig.field === field && sortConfig.direction === "asc" ? "desc" : "asc";
     setSortConfig({ field, direction });
 
@@ -89,6 +100,16 @@ const ContactsPage = () => {
     });
 
     setFilteredContacts(sorted);
+    setCurrentPage(1); // Reset to first page when sorting changes
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1); // Reset to first page when changing page size
   };
 
   const handleSearchChange = (e) => {
@@ -156,12 +177,110 @@ return (
             icon="Users"
           />
         ) : (
-          <ContactTable
-            contacts={filteredContacts}
-            onContactClick={handleContactClick}
-            sortConfig={sortConfig}
-            onSort={handleSort}
-          />
+          <>
+            <ContactTable
+              contacts={currentPageContacts}
+              onContactClick={handleContactClick}
+              sortConfig={sortConfig}
+              onSort={handleSort}
+            />
+            
+            {/* Pagination Controls */}
+            {filteredContacts.length > 0 && (
+              <div className="mt-6">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  {/* Pagination Info */}
+                  <div className="text-sm text-slate-600">
+                    Showing {startIndex + 1} to {Math.min(endIndex, filteredContacts.length)} of{' '}
+                    {filteredContacts.length} contacts
+                  </div>
+                  
+                  {/* Items Per Page Selector */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-slate-600">Show:</span>
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                      className="px-2 py-1 text-sm border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    >
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                    </select>
+                    <span className="text-sm text-slate-600">per page</span>
+                  </div>
+                </div>
+                
+                {/* Pagination Navigation */}
+                {totalPages > 1 && (
+                  <div className="flex justify-center mt-4">
+                    <nav className="flex items-center gap-1">
+                      {/* Previous Button */}
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={cn(
+                          "px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200",
+                          currentPage === 1
+                            ? "text-slate-400 cursor-not-allowed"
+                            : "text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        )}
+                      >
+                        Previous
+                      </button>
+                      
+                      {/* Page Numbers */}
+                      {Array.from({ length: totalPages }, (_, i) => i + 1)
+                        .filter(page => {
+                          // Show first page, last page, current page, and adjacent pages
+                          return page === 1 || 
+                                 page === totalPages || 
+                                 Math.abs(page - currentPage) <= 1;
+                        })
+                        .map((page, index, filteredPages) => {
+                          const prevPage = filteredPages[index - 1];
+                          const showEllipsis = prevPage && page - prevPage > 1;
+                          
+                          return (
+                            <div key={page} className="flex items-center">
+                              {showEllipsis && (
+                                <span className="px-2 text-slate-400">...</span>
+                              )}
+                              <button
+                                onClick={() => handlePageChange(page)}
+                                className={cn(
+                                  "px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200",
+                                  page === currentPage
+                                    ? "bg-primary text-white"
+                                    : "text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                )}
+                              >
+                                {page}
+                              </button>
+                            </div>
+                          );
+                        })}
+                      
+                      {/* Next Button */}
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={cn(
+                          "px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200",
+                          currentPage === totalPages
+                            ? "text-slate-400 cursor-not-allowed"
+                            : "text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        )}
+                      >
+                        Next
+                      </button>
+                    </nav>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
 
