@@ -41,7 +41,7 @@ const Modal = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0"
+className="fixed inset-0 z-10"
               style={{
                 backgroundColor: 'rgba(15, 23, 42, 0.6)',
                 backdropFilter: 'blur(8px)'
@@ -53,13 +53,13 @@ const Modal = ({
               &#8203;
             </span>
 
-            <motion.div
+<motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
               className={cn(
-                "inline-block w-full p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl",
+                "relative z-20 inline-block w-full p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl",
                 sizes[size],
                 className
               )}
