@@ -47,7 +47,7 @@ const CompaniesPage = () => {
     // Apply search filter
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(company =>
+filtered = filtered.filter(company =>
         company.name.toLowerCase().includes(term) ||
         (company.industry || "").toLowerCase().includes(term) ||
         (company.address || "").toLowerCase().includes(term)

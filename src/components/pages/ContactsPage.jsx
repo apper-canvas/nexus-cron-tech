@@ -58,7 +58,7 @@ useEffect(() => {
       return;
     }
 
-    const filtered = contacts.filter(contact => 
+const filtered = contacts.filter(contact => 
       contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (contact.company && contact.company.toLowerCase().includes(searchTerm.toLowerCase())) ||

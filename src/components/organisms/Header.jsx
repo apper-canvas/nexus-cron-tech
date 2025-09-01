@@ -7,10 +7,10 @@ import SearchBar from "@/components/molecules/SearchBar";
 import Button from "@/components/atoms/Button";
 
 const Header = ({ title, onMenuClick, searchValue, onSearchChange, onAddClick, buttonText = "Add", additionalActions }) => {
-  const { logout } = useContext(AuthContext) || {};
+const { logout } = useContext(AuthContext) || {};
 
   const handleLogout = async () => {
-    try {
+try {
       if (logout) {
         await logout();
         toast.success('Logged out successfully');
@@ -61,7 +61,7 @@ const Header = ({ title, onMenuClick, searchValue, onSearchChange, onAddClick, b
             
             {additionalActions && additionalActions}
             
-            <Button 
+<Button 
               variant="ghost" 
               onClick={handleLogout}
               className="flex items-center space-x-2"

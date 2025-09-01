@@ -144,7 +144,7 @@ const ActivitiesPage = () => {
       switch (filters.dateRange) {
         case 'today':
           filterDate.setHours(0, 0, 0, 0);
-          filtered = filtered.filter(activity => {
+filtered = filtered.filter(activity => {
             const activityDate = new Date(activity.dueDate || activity.completedAt);
             return activityDate >= filterDate && activityDate < new Date(filterDate.getTime() + 24 * 60 * 60 * 1000);
           });
@@ -168,8 +168,7 @@ const ActivitiesPage = () => {
     // Sort
     filtered.sort((a, b) => {
       let aValue, bValue;
-      
-      switch (sortField) {
+switch (sortField) {
         case 'title':
           aValue = a.title.toLowerCase();
           bValue = b.title.toLowerCase();

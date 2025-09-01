@@ -1,21 +1,22 @@
-import { createContext, useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { createContext, useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { setUser, clearUser } from './store/userSlice';
+import "@/index.css";
 import Layout from "@/components/organisms/Layout";
-import ContactsPage from "@/components/pages/ContactsPage";
-import DealsPage from "@/components/pages/DealsPage";
-import DealDetailPage from "@/components/pages/DealDetailPage";
-import CompaniesPage from "@/components/pages/CompaniesPage";
-import ActivitiesPage from "@/components/pages/ActivitiesPage";
+import ResetPassword from "@/components/pages/ResetPassword";
+import PromptPassword from "@/components/pages/PromptPassword";
 import AnalyticsPage from "@/components/pages/AnalyticsPage";
-import Login from '@/components/pages/Login';
-import Signup from '@/components/pages/Signup';
-import Callback from '@/components/pages/Callback';
-import ErrorPage from '@/components/pages/ErrorPage';
-import ResetPassword from '@/components/pages/ResetPassword';
-import PromptPassword from '@/components/pages/PromptPassword';
+import DealDetailPage from "@/components/pages/DealDetailPage";
+import DealsPage from "@/components/pages/DealsPage";
+import Signup from "@/components/pages/Signup";
+import ActivitiesPage from "@/components/pages/ActivitiesPage";
+import ContactsPage from "@/components/pages/ContactsPage";
+import CompaniesPage from "@/components/pages/CompaniesPage";
+import ErrorPage from "@/components/pages/ErrorPage";
+import Callback from "@/components/pages/Callback";
+import Login from "@/components/pages/Login";
+import { clearUser, setUser } from "@/store/userSlice";
 
 // Create auth context
 export const AuthContext = createContext(null);
@@ -23,8 +24,7 @@ export const AuthContext = createContext(null);
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isInitialized, setIsInitialized] = useState(false);
-  
+const [isInitialized, setIsInitialized] = useState(false);
   // Get authentication status with proper error handling
   const userState = useSelector((state) => state.user);
   const isAuthenticated = userState?.isAuthenticated || false;
@@ -110,7 +110,7 @@ function App() {
         dispatch(clearUser());
         navigate('/login');
       } catch (error) {
-        console.error("Logout failed:", error);
+console.error("Logout failed:", error);
       }
     }
   };

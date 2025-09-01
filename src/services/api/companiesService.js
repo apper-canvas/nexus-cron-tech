@@ -1,234 +1,267 @@
-const companiesData = [
-  {
-    Id: 1,
-    name: "TechCorp Solutions",
-    industry: "Technology",
-    address: "123 Innovation Drive, San Francisco, CA 94105",
-    notes: "Leading software development company specializing in enterprise solutions.",
-    contactCount: 8,
-    totalDealValue: 245000,
-    lastActivityDate: "2024-01-15T10:30:00Z",
-    createdAt: "2023-06-15T09:00:00Z",
-    updatedAt: "2024-01-15T10:30:00Z"
-  },
-  {
-    Id: 2,
-    name: "Global Manufacturing Inc",
-    industry: "Manufacturing",
-    address: "456 Industrial Blvd, Detroit, MI 48201",
-    notes: "Automotive parts manufacturer with worldwide distribution network.",
-    contactCount: 12,
-    totalDealValue: 890000,
-    lastActivityDate: "2024-01-14T14:20:00Z",
-    createdAt: "2023-05-20T11:00:00Z",
-    updatedAt: "2024-01-14T14:20:00Z"
-  },
-  {
-    Id: 3,
-    name: "HealthFirst Medical",
-    industry: "Healthcare",
-    address: "789 Medical Center Way, Boston, MA 02101",
-    notes: "Regional healthcare provider with multiple clinic locations.",
-    contactCount: 15,
-    totalDealValue: 450000,
-    lastActivityDate: "2024-01-13T16:45:00Z",
-    createdAt: "2023-07-10T08:30:00Z",
-    updatedAt: "2024-01-13T16:45:00Z"
-  },
-  {
-    Id: 4,
-    name: "Financial Partners LLC",
-    industry: "Financial Services",
-    address: "321 Wall Street, New York, NY 10005",
-    notes: "Investment firm specializing in mid-market private equity.",
-    contactCount: 6,
-    totalDealValue: 1200000,
-    lastActivityDate: "2024-01-12T11:15:00Z",
-    createdAt: "2023-04-05T13:45:00Z",
-    updatedAt: "2024-01-12T11:15:00Z"
-  },
-  {
-    Id: 5,
-    name: "RetailMax Stores",
-    industry: "Retail",
-    address: "987 Commerce Plaza, Chicago, IL 60601",
-    notes: "Chain of specialty retail stores across the Midwest region.",
-    contactCount: 10,
-    totalDealValue: 320000,
-    lastActivityDate: "2024-01-11T09:30:00Z",
-    createdAt: "2023-08-22T15:20:00Z",
-    updatedAt: "2024-01-11T09:30:00Z"
-  },
-  {
-    Id: 6,
-    name: "EduTech Academy",
-    industry: "Education",
-    address: "654 Learning Lane, Austin, TX 78701",
-    notes: "Online education platform for professional development courses.",
-    contactCount: 4,
-    totalDealValue: 85000,
-    lastActivityDate: "2024-01-10T13:00:00Z",
-    createdAt: "2023-09-01T10:00:00Z",
-    updatedAt: "2024-01-10T13:00:00Z"
-  },
-  {
-    Id: 7,
-    name: "GreenEnergy Systems",
-    industry: "Energy",
-    address: "147 Renewable Way, Portland, OR 97201",
-    notes: "Solar and wind energy solutions for commercial properties.",
-    contactCount: 7,
-    totalDealValue: 675000,
-    lastActivityDate: "2024-01-09T15:45:00Z",
-    createdAt: "2023-03-15T12:30:00Z",
-    updatedAt: "2024-01-09T15:45:00Z"
-  },
-  {
-    Id: 8,
-    name: "Logistics Pro",
-    industry: "Transportation",
-    address: "258 Freight Street, Atlanta, GA 30301",
-    notes: "Third-party logistics provider with nationwide coverage.",
-    contactCount: 9,
-    totalDealValue: 520000,
-    lastActivityDate: "2024-01-08T12:20:00Z",
-    createdAt: "2023-06-30T14:15:00Z",
-    updatedAt: "2024-01-08T12:20:00Z"
-  },
-  {
-    Id: 9,
-    name: "Creative Design Studio",
-    industry: "Creative Services",
-    address: "369 Art District, Los Angeles, CA 90028",
-    notes: "Full-service creative agency specializing in brand development.",
-    contactCount: 5,
-    totalDealValue: 125000,
-    lastActivityDate: "2024-01-07T10:10:00Z",
-    createdAt: "2023-10-12T09:45:00Z",
-    updatedAt: "2024-01-07T10:10:00Z"
-  },
-  {
-    Id: 10,
-    name: "Construction Builders",
-    industry: "Construction",
-    address: "741 Builder Avenue, Phoenix, AZ 85001",
-    notes: "Commercial construction company with focus on sustainable building.",
-    contactCount: 11,
-    totalDealValue: 950000,
-    lastActivityDate: "2024-01-06T14:30:00Z",
-    createdAt: "2023-02-28T11:20:00Z",
-    updatedAt: "2024-01-06T14:30:00Z"
-  },
-  {
-    Id: 11,
-    name: "FoodService Partners",
-    industry: "Food & Beverage",
-    address: "852 Culinary Court, Miami, FL 33101",
-    notes: "Restaurant chain with locations throughout Florida.",
-    contactCount: 13,
-    totalDealValue: 380000,
-    lastActivityDate: "2024-01-05T16:00:00Z",
-    createdAt: "2023-11-08T13:10:00Z",
-    updatedAt: "2024-01-05T16:00:00Z"
-  },
-  {
-    Id: 12,
-    name: "DataSecure Systems",
-    industry: "Cybersecurity",
-    address: "963 Security Blvd, Seattle, WA 98101",
-    notes: "Cybersecurity solutions for enterprise clients.",
-    contactCount: 6,
-    totalDealValue: 720000,
-    lastActivityDate: "2024-01-04T11:45:00Z",
-    createdAt: "2023-12-01T15:30:00Z",
-    updatedAt: "2024-01-04T11:45:00Z"
-  }
-];
-
 class CompaniesService {
   constructor() {
-    this.companies = [...companiesData];
+    // Initialize ApperClient for database operations
+    const { ApperClient } = window.ApperSDK;
+    this.apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+    this.tableName = 'company_c';
   }
 
   async getAll() {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return [...this.companies].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    try {
+      const params = {
+        fields: [
+          {"field": {"Name": "Name"}},
+          {"field": {"Name": "Tags"}},
+          {"field": {"Name": "address_c"}},
+          {"field": {"Name": "contact_count_c"}},
+          {"field": {"Name": "created_at_c"}},
+          {"field": {"Name": "industry_c"}},
+          {"field": {"Name": "last_activity_date_c"}},
+          {"field": {"Name": "notes_c"}},
+          {"field": {"Name": "total_deal_value_c"}},
+          {"field": {"Name": "updated_at_c"}}
+        ],
+        orderBy: [{"fieldName": "updated_at_c", "sorttype": "DESC"}]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+
+      if (!response.data || response.data.length === 0) {
+        return [];
+      }
+
+      return response.data.map(company => ({
+        Id: company.Id,
+        name: company.Name || '',
+        industry: company.industry_c || '',
+        address: company.address_c || '',
+        notes: company.notes_c || '',
+        contactCount: company.contact_count_c || 0,
+        totalDealValue: company.total_deal_value_c || 0,
+        lastActivityDate: company.last_activity_date_c,
+        createdAt: company.created_at_c || company.CreatedOn,
+        updatedAt: company.updated_at_c || company.ModifiedOn
+      }));
+    } catch (error) {
+      console.error('Error fetching companies:', error?.response?.data?.message || error);
+      return [];
+    }
   }
 
   async getById(id) {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 200));
-    const company = this.companies.find(company => company.Id === parseInt(id));
-    if (!company) {
-      throw new Error("Company not found");
+    try {
+      const params = {
+        fields: [
+          {"field": {"Name": "Name"}},
+          {"field": {"Name": "Tags"}},
+          {"field": {"Name": "address_c"}},
+          {"field": {"Name": "contact_count_c"}},
+          {"field": {"Name": "created_at_c"}},
+          {"field": {"Name": "industry_c"}},
+          {"field": {"Name": "last_activity_date_c"}},
+          {"field": {"Name": "notes_c"}},
+          {"field": {"Name": "total_deal_value_c"}},
+          {"field": {"Name": "updated_at_c"}}
+        ]
+      };
+
+      const response = await this.apperClient.getRecordById(this.tableName, parseInt(id), params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error("Company not found");
+      }
+
+      if (!response.data) {
+        throw new Error("Company not found");
+      }
+
+      const company = response.data;
+      return {
+        Id: company.Id,
+        name: company.Name || '',
+        industry: company.industry_c || '',
+        address: company.address_c || '',
+        notes: company.notes_c || '',
+        contactCount: company.contact_count_c || 0,
+        totalDealValue: company.total_deal_value_c || 0,
+        lastActivityDate: company.last_activity_date_c,
+        createdAt: company.created_at_c || company.CreatedOn,
+        updatedAt: company.updated_at_c || company.ModifiedOn
+      };
+    } catch (error) {
+      console.error(`Error fetching company ${id}:`, error?.response?.data?.message || error);
+      throw error;
     }
-    return { ...company };
   }
 
   async create(companyData) {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 400));
-    
-    const maxId = this.companies.length > 0 
-      ? Math.max(...this.companies.map(company => company.Id)) 
-      : 0;
-    
-    const newCompany = {
-      Id: maxId + 1,
-      name: companyData.name,
-      industry: companyData.industry || '',
-      address: companyData.address || '',
-      notes: companyData.notes || '',
-      contactCount: 0,
-      totalDealValue: 0,
-      lastActivityDate: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+    try {
+      const params = {
+        records: [{
+          Name: companyData.name?.trim() || 'Unnamed Company',
+          industry_c: companyData.industry?.trim() || '',
+          address_c: companyData.address?.trim() || '',
+          notes_c: companyData.notes?.trim() || '',
+          contact_count_c: 0,
+          total_deal_value_c: 0,
+          created_at_c: new Date().toISOString(),
+          updated_at_c: new Date().toISOString()
+        }]
+      };
 
-    this.companies.push(newCompany);
-    return { ...newCompany };
+      const response = await this.apperClient.createRecord(this.tableName, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        const failed = response.results.filter(r => !r.success);
+        
+        if (failed.length > 0) {
+          console.error(`Failed to create ${failed.length} companies:`, failed);
+          failed.forEach(record => {
+            if (record.errors) {
+              record.errors.forEach(error => console.error(`${error.fieldLabel || 'Field'}: ${error.message || error}`));
+            }
+            if (record.message) console.error(record.message);
+          });
+        }
+
+        if (successful.length > 0) {
+          const created = successful[0].data;
+          return {
+            Id: created.Id,
+            name: created.Name || '',
+            industry: created.industry_c || '',
+            address: created.address_c || '',
+            notes: created.notes_c || '',
+            contactCount: created.contact_count_c || 0,
+            totalDealValue: created.total_deal_value_c || 0,
+            lastActivityDate: created.last_activity_date_c,
+            createdAt: created.created_at_c || created.CreatedOn,
+            updatedAt: created.updated_at_c || created.ModifiedOn
+          };
+        }
+      }
+
+      throw new Error('Failed to create company');
+    } catch (error) {
+      console.error('Error creating company:', error?.response?.data?.message || error);
+      throw error;
+    }
   }
 
   async update(id, companyData) {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 350));
-    
-    const index = this.companies.findIndex(company => company.Id === parseInt(id));
-    if (index === -1) {
-      throw new Error("Company not found");
+    try {
+      const updateFields = {};
+      
+      if (companyData.name) updateFields.Name = companyData.name.trim();
+      if (companyData.industry !== undefined) updateFields.industry_c = companyData.industry?.trim() || '';
+      if (companyData.address !== undefined) updateFields.address_c = companyData.address?.trim() || '';
+      if (companyData.notes !== undefined) updateFields.notes_c = companyData.notes?.trim() || '';
+      if (companyData.contactCount !== undefined) updateFields.contact_count_c = companyData.contactCount || 0;
+      if (companyData.totalDealValue !== undefined) updateFields.total_deal_value_c = companyData.totalDealValue || 0;
+      if (companyData.lastActivityDate !== undefined) updateFields.last_activity_date_c = companyData.lastActivityDate;
+      
+      updateFields.updated_at_c = new Date().toISOString();
+
+      const params = {
+        records: [{
+          Id: parseInt(id),
+          ...updateFields
+        }]
+      };
+
+      const response = await this.apperClient.updateRecord(this.tableName, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        const failed = response.results.filter(r => !r.success);
+        
+        if (failed.length > 0) {
+          console.error(`Failed to update company ${id}:`, failed);
+          throw new Error('Failed to update company');
+        }
+
+        if (successful.length > 0) {
+          const updated = successful[0].data;
+          return {
+            Id: updated.Id,
+            name: updated.Name || '',
+            industry: updated.industry_c || '',
+            address: updated.address_c || '',
+            notes: updated.notes_c || '',
+            contactCount: updated.contact_count_c || 0,
+            totalDealValue: updated.total_deal_value_c || 0,
+            lastActivityDate: updated.last_activity_date_c,
+            createdAt: updated.created_at_c || updated.CreatedOn,
+            updatedAt: updated.updated_at_c || updated.ModifiedOn
+          };
+        }
+      }
+
+      throw new Error('Failed to update company');
+    } catch (error) {
+      console.error('Error updating company:', error?.response?.data?.message || error);
+      throw error;
     }
-
-    this.companies[index] = {
-      ...this.companies[index],
-      ...companyData,
-      updatedAt: new Date().toISOString()
-    };
-
-    return { ...this.companies[index] };
   }
 
   async delete(id) {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    const index = this.companies.findIndex(company => company.Id === parseInt(id));
-    if (index === -1) {
-      throw new Error("Company not found");
-    }
+    try {
+      const params = { 
+        RecordIds: [parseInt(id)]
+      };
 
-    const deletedCompany = { ...this.companies[index] };
-    this.companies.splice(index, 1);
-return deletedCompany;
+      const response = await this.apperClient.deleteRecord(this.tableName, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        const failed = response.results.filter(r => !r.success);
+        
+        if (failed.length > 0) {
+          console.error(`Failed to delete company ${id}:`, failed);
+          throw new Error('Failed to delete company');
+        }
+
+        return successful.length > 0;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error deleting company:', error?.response?.data?.message || error);
+      throw error;
+    }
   }
 
   // Get companies with updated relationship counts
   async updateCompanyMetrics(companyId) {
-    const company = this.companies.find(c => c.Id === parseInt(companyId));
-    if (!company) return;
-
     try {
+      const company = await this.getById(companyId);
+      if (!company) return;
+
       // Update contact count
       const { contactService } = await import('./contactService');
       const contacts = await contactService.getAll();
@@ -242,21 +275,22 @@ return deletedCompany;
       const companyDeals = deals.filter(d => d.company === company.name);
       const totalDealValue = companyDeals.reduce((sum, deal) => sum + (deal.value || 0), 0);
       
-      // Update metrics
-      company.contactCount = companyContacts.length;
-      company.totalDealValue = totalDealValue;
-      
       // Update last activity date from latest deal or contact
       const lastContactDate = companyContacts.length > 0 ? 
         Math.max(...companyContacts.map(c => new Date(c.updatedAt || c.createdAt).getTime())) : 0;
       const lastDealDate = companyDeals.length > 0 ?
         Math.max(...companyDeals.map(d => new Date(d.updatedAt || d.createdAt).getTime())) : 0;
       
-      if (lastContactDate > 0 || lastDealDate > 0) {
-        company.lastActivityDate = new Date(Math.max(lastContactDate, lastDealDate)).toISOString();
-      }
+      const lastActivityDate = (lastContactDate > 0 || lastDealDate > 0) 
+        ? new Date(Math.max(lastContactDate, lastDealDate)).toISOString()
+        : null;
       
-      company.updatedAt = new Date().toISOString();
+      // Update metrics in database
+      await this.update(companyId, {
+        contactCount: companyContacts.length,
+        totalDealValue: totalDealValue,
+        lastActivityDate: lastActivityDate
+      });
     } catch (error) {
       console.error('Failed to update company metrics:', error);
     }
