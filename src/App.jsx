@@ -9,6 +9,7 @@ import PromptPassword from "@/components/pages/PromptPassword";
 import AnalyticsPage from "@/components/pages/AnalyticsPage";
 import DealDetailPage from "@/components/pages/DealDetailPage";
 import DealsPage from "@/components/pages/DealsPage";
+import QuotesPage from "@/components/pages/QuotesPage";
 import Signup from "@/components/pages/Signup";
 import ActivitiesPage from "@/components/pages/ActivitiesPage";
 import ContactsPage from "@/components/pages/ContactsPage";
@@ -130,12 +131,13 @@ return <div className="loading flex items-center justify-center p-6 h-full w-ful
           <Route path="/error" element={<ErrorPage />} />
           <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
           <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
-          <Route path="/" element={<Layout />}>
+<Route path="/" element={<Layout />}>
             <Route index element={<ContactsPage />} />
             <Route path="contacts" element={<ContactsPage />} />
             <Route path="deals" element={<DealsPage />} />
             <Route path="deals/:id" element={<DealDetailPage />} />
             <Route path="companies" element={<CompaniesPage />} />
+            <Route path="quotes" element={<QuotesPage />} />
             <Route path="activities" element={<ActivitiesPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
           </Route>
