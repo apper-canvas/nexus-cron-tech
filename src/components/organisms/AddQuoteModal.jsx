@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import Modal from "@/components/molecules/Modal";
 import FormField from "@/components/molecules/FormField";
 import Button from "@/components/atoms/Button";
-import dealsService from "@/services/api/dealsService";
+import { dealsService } from "@/services/api/dealsService";
 
 const AddQuoteModal = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
